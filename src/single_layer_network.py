@@ -33,6 +33,7 @@ def train_on_cached_data(neural_net_type, number_of_epochs):
     NUMBER_OF_BATCHES = 50
 
     for x in range(0, NUMBER_OF_BATCHES):
+        print("BATCH: {} of {}".format(str(x + 1), str(NUMBER_OF_BATCHES)))
         new_label_paths = load_training_tiles(EQUALIZATION_BATCH_SIZE)
         print("Got batch of {} labels".format(len(new_label_paths)))
         new_training_images, new_onehot_training_labels = format_as_onehot_arrays(new_label_paths)
@@ -166,6 +167,23 @@ def list_findings(labels, test_images, model):
     return false_pos, fp_images
 
 
+def list_findings_2(labels, test_images, model):
+    """Return lists of predicted way probabilities."""
+    npy_test_images = numpy.array([img_loc_tuple[0] for img_loc_tuple in test_images])
+    npy_test_images = npy_test_images.astype(numpy.float32)
+    npy_test_images = numpy.multiply(npy_test_images, 1.0 / 255.0)
+    return [wp[0] for wp in model.predict(npy_test_images)]
+    # way_probs = []
+    # index = 0
+    # for x in range(0, len(npy_test_images) - 100, 100):
+    #     images = npy_test_images[x:x + 100]
+    #     image_tuples = test_images[x:x + 100]
+    #     way_probs.append([wp[0] for wp in model.predict(images)])
+    # images = npy_test_images[index:]
+    # image_tuples = test_images[index:]
+    # way_probs.append([wp[0] for wp in model.predict(images)])
+
+
 def sort_findings(model, image_tuples, test_images, labels, false_positives, fp_images, index):
     """False positive if model says road doesn't exist, but OpenStreetMap says it does.
 
@@ -183,6 +201,14 @@ def sort_findings(model, image_tuples, test_images, labels, false_positives, fp_
         pred_index += 1
         index += 1
     return index, false_positives, fp_images
+
+
+def sort_findings_2(model, image_tuples, test_images, labels, false_positives, fp_images, index):
+    """True positive if the model and OSM agree, false positive if the model thinks
+    there's a road when there's not (according to OSM), and false negative if the
+    model determines there's no road when OSM says there is one.
+    """
+    None
 
 
 def predictions_for_tiles(test_images, model):

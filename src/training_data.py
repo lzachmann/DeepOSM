@@ -76,8 +76,8 @@ def way_bitmap_for_naip(
     Set matrix to 1 for any pixel where an OSM way runs over.
     """
     parts = raster_data_path.split('/')
-    naip_grid = parts[len(parts)-2]
-    naip_filename = parts[len(parts)-1]
+    naip_grid = parts[len(parts) - 2]
+    naip_filename = parts[len(parts) - 1]
     cache_filename = LABELS_DATA_DIR + '/' + naip_grid + '/' + naip_filename + '-ways.bitmap.npy'
 
     try:
@@ -292,7 +292,7 @@ def format_as_onehot_arrays(new_label_paths):
         label = numpy.load(full_path)
 
         parts = full_path.split('.')[0].split('/')
-        file_suffix = parts[len(parts)-1]
+        file_suffix = parts[len(parts) - 1]
         img_path = "{}/{}.colors".format(IMAGE_CACHE_DIRECTORY, file_suffix)
 
         if has_ways_in_center(label[0], 1):
@@ -333,8 +333,8 @@ def load_all_training_tiles(naip_path, bands):
     rows = bands_data.shape[0]
     cols = bands_data.shape[1]
     parts = naip_path.split('/')
-    naip_grid = parts[len(parts)-2]
-    naip_filename = parts[len(parts)-1]
+    naip_grid = parts[len(parts) - 2]
+    naip_filename = parts[len(parts) - 1]
     cache_filename = LABELS_DATA_DIR + '/' + naip_grid + '/' + naip_filename + '-ways.bitmap.npy'
     way_bitmap_npy = numpy.load(cache_filename)
 

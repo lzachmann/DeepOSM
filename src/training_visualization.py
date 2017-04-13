@@ -62,7 +62,7 @@ def render_results_as_image(raster_data_path,
                             predictions=None):
     """Save the source TIFF as a JPEG, with labels and data overlaid."""
     timestr = time.strftime("%Y%m%d-%H%M%S")
-    outfile = os.path.splitext(raster_data_path)[0] + '-' + timestr + ".jpeg"
+    outfile = os.path.splitext(raster_data_path)[0] + '-' + timestr + ".png"  # jpeg
     # TIF to JPEG bit from:
     # http://stackoverflow.com/questions/28870504/converting-tiff-to-jpeg-in-python
     im = Image.open(raster_data_path)
@@ -108,7 +108,7 @@ def render_results_as_image(raster_data_path,
     t1 = time.time()
     print("{0:.1f}s to DRAW WAYS ON JPEG".format(t1 - t0))
 
-    im.save(outfile, "JPEG")
+    im.save(outfile, "PNG")
 
 
 def shade_labels(image, labels, predictions, tile_size):
