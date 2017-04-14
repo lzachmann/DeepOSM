@@ -73,3 +73,5 @@ data/
 !.elasticbeanstalk/*.global.yml
 Dockerfile.cpu
 Dockerfile.gpu
+
+credentials.csv

@@ -167,21 +167,26 @@ def list_findings(labels, test_images, model):
     return false_pos, fp_images
 
 
-def list_findings_2(labels, test_images, model):
+def list_findings_2(labels, images, model):  # gets 'Killed'
     """Return lists of predicted way probabilities."""
-    npy_test_images = numpy.array([img_loc_tuple[0] for img_loc_tuple in test_images])
-    npy_test_images = npy_test_images.astype(numpy.float32)
-    npy_test_images = numpy.multiply(npy_test_images, 1.0 / 255.0)
-    return [wp[0] for wp in model.predict(npy_test_images)]
-    # way_probs = []
-    # index = 0
-    # for x in range(0, len(npy_test_images) - 100, 100):
-    #     images = npy_test_images[x:x + 100]
-    #     image_tuples = test_images[x:x + 100]
-    #     way_probs.append([wp[0] for wp in model.predict(images)])
-    # images = npy_test_images[index:]
-    # image_tuples = test_images[index:]
-    # way_probs.append([wp[0] for wp in model.predict(images)])
+    npy_images = numpy.array([img_loc_tuple[0] for img_loc_tuple in images])
+    npy_images = npy_images.astype(numpy.float32)
+    npy_images = numpy.multiply(npy_images, 1.0 / 255.0)
+    return [wp[0] for wp in model.predict(npy_images)]
+
+
+def list_findings_3(labels, images, model):  # npy_images[9178:].shape
+    """Return lists of predicted way probabilities."""
+    npy_images = numpy.array([img_loc_tuple[0] for img_loc_tuple in images])
+    npy_images = npy_images.astype(numpy.float32)
+    npy_images = numpy.multiply(npy_images, 1.0 / 255.0)
+    tf_preds = []
+    for x in range(0, len(npy_images) - 100, 100):
+        x_images = npy_images[x:x + 100]
+        tf_preds.append([wp[0] for wp in model.predict(x_images)])
+    x_images = npy_images[(x + 100):]
+    tf_preds.append([wp[0] for wp in model.predict(x_images)])
+    return [item for sublist in tf_preds for item in sublist]
 
 
 def sort_findings(model, image_tuples, test_images, labels, false_positives, fp_images, index):

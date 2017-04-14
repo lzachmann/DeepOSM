@@ -4,11 +4,13 @@ import numpy
 from osgeo import gdal, osr
 from PIL import Image
 from src.config import CACHE_PATH, METADATA_PATH, GEO_DATA_DIR
-from src.single_layer_network import load_model, list_findings_2
+from src.single_layer_network import load_model, list_findings_3
 from src.training_data import load_all_training_tiles, read_naip, NAIP_PIXEL_BUFFER
 # from src.training_visualization import render_results_for_analysis
 
 tf_preds_dir = os.path.join(GEO_DATA_DIR, 'tf_preds')
+if not os.path.exists(tf_preds_dir):
+    os.makedirs(tf_preds_dir)
 
 
 def rotate_and_flip(im):
@@ -36,7 +38,7 @@ def main():
         path_parts = path.split('/')
         filename = path_parts[len(path_parts) - 1]
 
-        wp_preds = list_findings_2(labels, images, model)
+        wp_preds = list_findings_3(labels, images, model)
         start_xs = [label[1] for label in labels]
         start_ys = [label[2] for label in labels]
         x_values = numpy.unique(start_xs).size
